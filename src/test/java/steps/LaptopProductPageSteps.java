@@ -26,7 +26,7 @@ public class LaptopProductPageSteps {
     //Развернуть список характеристик Ноутбука
     public void getAllSpecifications() {
         // Прокрутка страницы вниз
-        JavaScriptHelper.scrollBy(0, 1600);
+        JavaScriptHelper.scrollBy(0, 1000);
         laptopProductPage.buttonAllSpecifications().click();
     }
 
@@ -42,7 +42,7 @@ public class LaptopProductPageSteps {
 
     }
 
-    @И("Проверить, что в блоке Характеристики заголовок содержит ASUS")
+    @Тогда("Проверить, что в блоке Характеристики заголовок содержит ASUS")
     //Проверить, что в блоке Характеристики заголовок содержит ASUS
     public void chCompanyAsusEquals() {
         String actual = laptopProductPage.baseElementChCompany().getText();
@@ -50,7 +50,7 @@ public class LaptopProductPageSteps {
         logger.info("Все ОК! В блоке Характеристики заголовок содержит ASUS");
     }
 
-    @И("Проверить, что в блоке Характеристики значение Объем оперативной памяти равен 32 ГБ")
+    @Тогда("Проверить, что в блоке Характеристики значение Объем оперативной памяти равен 32 ГБ")
     //Проверить, что в блоке Характеристики значение Объем оперативной памяти равен 32 ГБ
     public void chRAMEquals() {
         String actual = laptopProductPage.baseElementChRAM().getText();
