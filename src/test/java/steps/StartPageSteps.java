@@ -7,7 +7,10 @@ import io.cucumber.java.ru.Тогда;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import web.drivers.WebDriverFactory;
 import web.pages.StartPage;
 
 import java.util.ArrayList;
@@ -83,17 +86,12 @@ public class StartPageSteps {
 
     // Проверить, что отображаются ссылки: Встраиваемая техника, Техника для кухни, Техника для дома
     @Тогда("Проверить, что отображаются ссылки: Встраиваемая техника, Техника для кухни, Техника для дома")
-    public void isDisplayedLinkApplianceSubcategories() {
-        List<String> expectedResultSubcategories = new ArrayList();
-        expectedResultSubcategories.add("Встраиваемая техника");
-        expectedResultSubcategories.add("Техника для кухни");
-        expectedResultSubcategories.add("Техника для дома");
-
-        List<String> actualResultSubcategories =
-                startPage.linksSubcategories().stream().map(WebElement::getText).collect(Collectors.toList());
-
-        Assertions.assertEquals(expectedResultSubcategories, actualResultSubcategories,
-                "ERROR!Запрашиваемые категории не найдены");
+    public void isDisplayedLinkApplianceSubcategories(List<String> args) {
+        WebDriver driver = WebDriverFactory.getCurrentDriver();
+        for (String element : args) {
+            WebElement el = driver.findElement(By.xpath("//a[text()=\"" + element + "\"]"));
+            Assertions.assertTrue(el.isDisplayed(), "ERROR!Ссылка " + el.getText() + " не отображается");
+        }
         logger.info("Все ОК! Ссылки: Встраиваемая техника, Техника для кухни, Техника для дома отображаются");
     }
 
