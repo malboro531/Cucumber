@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>_Sample</artifactId>
+    <artifactId>_Sample_04</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- Параметры -->
@@ -13,28 +13,34 @@
         <!-- Кодировка проекта - UTF-8 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!-- Версия Java - 15 -->
         <source>15</source>
         <target>15</target>
         <!-- Версии зависимостей: -->
         <!-- Cucumber -->
-        <cucumber>7.8.1</cucumber>
+        <cucumber>6.11.0</cucumber>
         <!-- JUnit -->
-        <junit>5.9.0</junit>
-        <junit-platform>1.9.0</junit-platform>
+        <junit-jupiter-engine>5.8.0</junit-jupiter-engine>
+        <junit-vintage-engine>5.8.0</junit-vintage-engine>
+        <!--junit-jupiter-api>5.8.0</junit-jupiter-api>
+        <junit-platform-commons>1.8.0</junit-platform-commons>
+        <junit-platform-launcher>1.8.0</junit-platform-launcher-->
         <!-- Selenium WebDriver -->
-        <selenium-java>4.6.0</selenium-java>
+        <selenium-java>4.0.0-beta-4</selenium-java>
         <!-- WebDriver Manager -->
-        <webdrivermanager>5.3.1</webdrivermanager>
+        <webdrivermanager>5.0.2</webdrivermanager>
         <!-- Log4J -->
-        <log4j-api>2.19.0</log4j-api>
-        <log4j-core>2.19.0</log4j-core>
+        <log4j-api>2.14.1</log4j-api>
+        <log4j-core>2.14.1</log4j-core>
         <!-- aShot -->
         <ashot>1.5.4</ashot>
+        <!-- Allure Cucumber6 JVM -->
+        <allure-cucumber6-jvm>2.15.0</allure-cucumber6-jvm>
+        <!-- AspectJ -->
+        <aspectjweaver>1.9.7</aspectjweaver>
         <!-- Версии плагинов: -->
-        <!-- maven-surefire-plugin -->
+        <!-- Maven Surefire Plugin -->
         <maven-surefire-plugin>2.22.2</maven-surefire-plugin>
-        <!-- maven-compiler-plugin -->
+        <!-- Maven Compiler Plugin -->
         <maven-compiler-plugin>3.8.1</maven-compiler-plugin>
     </properties>
 
@@ -49,6 +55,12 @@
         </dependency>
         <dependency>
             <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
             <version>${cucumber}</version>
             <scope>test</scope>
@@ -56,16 +68,34 @@
         <!-- JUnit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-jupiter-engine}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>${junit-vintage-engine}</version>
+            <scope>test</scope>
+        </dependency>
+        <!--dependency>
+            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit}</version>
+            <version>${junit-jupiter-api}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.platform</groupId>
-            <artifactId>junit-platform-suite</artifactId>
-            <version>${junit-platform}</version>
+            <artifactId>junit-platform-commons</artifactId>
+            <version>${junit-platform-commons}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <version>${junit-platform-launcher}</version>
+            <scope>test</scope>
+        </dependency-->
         <!-- Selenium WebDriver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -100,8 +130,20 @@
             <version>${ashot}</version>
             <scope>test</scope>
         </dependency>
+        <!-- Allure Cucumber6 JVM -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-cucumber6-jvm</artifactId>
+            <version>${allure-cucumber6-jvm}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- AspectJ -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectjweaver}</version>
+        </dependency>
     </dependencies>
-
     <!-- Сборка -->
     <build>
         <!-- Плагины -->
@@ -111,14 +153,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin}</version>
-                <!-- Конфигурация -->
-                <!--configuration>
-                    <properties>
-                        <configurationParameters>
-                            cucumber.junit-platform.naming-strategy=long
-                        </configurationParameters>
-                    </properties>
-                </configuration-->
+                <configuration>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectjweaver}/aspectjweaver-${aspectjweaver}.jar"
+                        -Dcucumber.options="--plugin io.qameta.allure.cucumber6jvm.AllureCucumber6Jvm"
+                    </argLine>
+                </configuration>
             </plugin>
             <!-- maven-compiler-plugin -->
             <plugin>
@@ -130,7 +170,14 @@
                     <target>${target}</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>2.9</version>
+                <configuration>
+                    <reportVersion>2.6.0</reportVersion>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
